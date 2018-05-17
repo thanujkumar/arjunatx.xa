@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+		<property name="driverClassName" value="com.arjuna.ats.jdbc.TransactionalDriver" />
+		<property name="url" value="jdbc:arjuna:oracle:thin:@localhost:1521/orcl" />
+		<property name="connectionProperties">
+		<props>
+				<prop key="user">appdata</prop>
+				<prop key="password">app</prop>
+				<prop key="DYNAMIC_CLASS">spf2.arjunatx.xa.jdbc.OracleXADynamicClazz</prop>
+			</props>
+		</property>
+	</bean>
+
+
+	<!-- TX Configuration -->
+	<bean id="arjunaTransactionManager" class="com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionManagerImple" />
+
+	<bean id="arjunaUserTransaction" class="com.arjuna.ats.internal.jta.transaction.arjunacore.UserTransactionImple" />
+	<!--  bean id="arjunaUserTransaction" class="com.arjuna.ats.jta.UserTransaction"  factory-method="userTransaction"/ -->
+
+	<bean id="transactionManager"	class="org.springframework.transaction.jta.JtaTransactionManager">
+		<property name="transactionManager"	ref="arjunaTransactionManager" />
+		<property name="userTransaction" ref="arjunaUserTransaction" />
+	</bean>
+
+   <!-- DAO -->
+   <bean id="operationDAO" class="spf2.arjunatx.xa.jdbc.OperationDAO">
+      <property name="dataSource" ref="dataSource" />
+   </bean>  
+
+   <!-- Beans to apply transactions services-->
+   <bean id="operationServiceTarget" class="spf2.arjunatx.xa.jdbc.OperationService" >
+      <property name="operationDAO" ref="operationDAO" />
+   </bean>
+   
+   <!-- where to apply transaction sematics -->
+   <bean id="operationService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+      <property name="transactionManager" ref="transactionManager" />
+      <property name="target" ref="operationServiceTarget" />
+      <property name="transactionAttributes"> 
+         <props>
+           <prop key="doTx*">PROPAGATION_REQUIRED,-RuntimeException</prop>
+         </props>
+      </property>
+    </bean>
+</beans>
