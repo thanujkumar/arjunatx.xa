@@ -9,9 +9,17 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
+			<!-- Compiler properties for maven -->
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<encoding>UTF-8</encoding>
+		<project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
+		<project.resources.sourceEncoding>${encoding}</project.resources.sourceEncoding>
+	
 		<spring.version>4.2.5.RELEASE</spring.version>
 		<hibernate.version>5.1.0.Final</hibernate.version>
-		<oracle.driver.version>12.1.0.2.0</oracle.driver.version>
+		<oracle.driver.version>12.2.0.1</oracle.driver.version>
 		<logback.version>1.1.2</logback.version>
 		<version.narayana>5.8.1.Final</version.narayana>
 		<version.jboss-transaction-api>1.0.1.Final</version.jboss-transaction-api>
@@ -27,7 +35,7 @@
 	</properties>
 
 	<dependencies>
-  
+
 		<!-- Spring framework -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -128,12 +136,12 @@
 		<!-- Oracle -->
 		<dependency>
 			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc7</artifactId>
+			<artifactId>ojdbc8</artifactId>
 			<version>${oracle.driver.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>com.oracle.ucp</groupId>
+			<groupId>com.oracle.jdbc</groupId>
 			<artifactId>ucp</artifactId>
 			<version>${oracle.driver.version}</version>
 		</dependency>
@@ -160,6 +168,8 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<configuration>
 						<forceJavacCompilerUse>true</forceJavacCompilerUse>
+						<source>1.8</source>
+						<target>1.8</target>
 					</configuration>
 					<dependencies>
 						<dependency>
