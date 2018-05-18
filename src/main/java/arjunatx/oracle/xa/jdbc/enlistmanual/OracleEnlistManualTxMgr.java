@@ -1,4 +1,4 @@
-package arjunatx.h2.xa.jdbc.enlistmanual;
+package arjunatx.oracle.xa.jdbc.enlistmanual;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -14,7 +14,7 @@ import oracle.jdbc.xa.client.OracleXADataSource;
 /*
  * http://jbossts.blogspot.in/2017/12/narayana-jdbc-transactional-driver.html
  */
-public class EnlistManualTxMgr {
+public class OracleEnlistManualTxMgr {
 	
 	public static void main(String[] args) throws Exception {
 		

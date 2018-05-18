@@ -9,14 +9,14 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
-			<!-- Compiler properties for maven -->
+		<!-- Compiler properties for maven -->
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<encoding>UTF-8</encoding>
 		<project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
 		<project.resources.sourceEncoding>${encoding}</project.resources.sourceEncoding>
-	
+
 		<spring.version>4.2.5.RELEASE</spring.version>
 		<hibernate.version>5.1.0.Final</hibernate.version>
 		<oracle.driver.version>12.2.0.1</oracle.driver.version>
@@ -32,9 +32,18 @@
 		<dropwizard.version>3.2.5</dropwizard.version>
 		<javamelody.core.version>1.70.0</javamelody.core.version>
 		<surefire.version>2.20</surefire.version>
+		<h2.db.version>1.4.197</h2.db.version>
+
 	</properties>
 
 	<dependencies>
+		<!-- h2 Database -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${h2.db.version}</version>
+		</dependency>
+
 
 		<!-- Spring framework -->
 		<dependency>
