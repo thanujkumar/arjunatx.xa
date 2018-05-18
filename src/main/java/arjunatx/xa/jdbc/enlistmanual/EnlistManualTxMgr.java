@@ -1,4 +1,4 @@
-package spf2.arjunatx.xa.jdbc.enlistmanual;
+package arjunatx.xa.jdbc.enlistmanual;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
