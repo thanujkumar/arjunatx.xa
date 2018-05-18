@@ -1,4 +1,4 @@
-package arjunatx.xa.jdbc.enlistmanual;
+package arjunatx.h2.xa.jdbc.enlistmanual;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
