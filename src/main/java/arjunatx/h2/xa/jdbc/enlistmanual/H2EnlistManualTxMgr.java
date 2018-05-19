@@ -104,16 +104,24 @@ public class H2EnlistManualTxMgr {
 	public static void main(String[] args) throws Exception {
 		setUp();
 		verify();
-	
-		//Using XADataSource with manual enlisted
-		processTx(() -> {
-			 try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		});
 		
+		try {
+
+			// Using XADataSource with manual enlisted
+			processTx(() -> {
+				try {
+					Thread.sleep(100);
+					//throw new RuntimeException();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			});
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		//Verify whether commit or rollback based on exception set in processTx
 		verify();
 		
 	}
