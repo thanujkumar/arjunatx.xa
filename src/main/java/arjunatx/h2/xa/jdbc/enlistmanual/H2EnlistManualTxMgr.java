@@ -29,6 +29,9 @@ public class H2EnlistManualTxMgr {
 		ConsoleHandler consoleHandler = new ConsoleHandler();
 		consoleHandler.setLevel(Level.ALL);
 		rootLogger.addHandler(consoleHandler);
+		
+		String confFile = com.arjuna.common.util.ConfigurationInfo.getPropertiesFile();
+		System.out.println(confFile);
 	}
 	
 	 private static final String DB_DRIVER = "org.h2.Driver";
