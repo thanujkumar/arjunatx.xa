@@ -32,6 +32,7 @@ public class H2EnlistManualTxMgr {
 		
 		String confFile = com.arjuna.common.util.ConfigurationInfo.getPropertiesFile();
 		System.out.println(confFile);
+	
 	}
 	
 	 private static final String DB_DRIVER = "org.h2.Driver";
