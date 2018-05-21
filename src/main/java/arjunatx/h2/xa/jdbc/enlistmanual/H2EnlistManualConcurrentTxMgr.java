@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import javax.sql.XAConnection;
 import javax.sql.XADataSource;
@@ -13,8 +14,13 @@ import javax.transaction.HeuristicRollbackException;
 import javax.transaction.TransactionManager;
 
 import org.h2.jdbcx.JdbcDataSource;
+import org.springframework.core.NamedThreadLocal;
+
+import com.arjuna.ats.internal.arjuna.thread.ThreadActionData;
+import com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionManagerImple;
 
 public class H2EnlistManualConcurrentTxMgr {
+	
 
 	private static final String DB_DRIVER = "org.h2.Driver";
 	private static final String DB_URL = "jdbc:h2:mem:%s;DB_CLOSE_DELAY=-1";
@@ -104,7 +110,7 @@ public class H2EnlistManualConcurrentTxMgr {
 				runTx(() -> {
 					try {
 						Thread.sleep(100);
-						// throw new RuntimeException();
+						throw new RuntimeException();
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -145,19 +151,31 @@ public class H2EnlistManualConcurrentTxMgr {
 		ps2.setInt(1, i);
 		ps2.setString(2, "Ajeeth-TX"+i);
 		
+		 Thread t = Thread.currentThread();
+		 t.getThreadGroup().list();
+		
+		  
 		try {
 			ps1.executeUpdate();
 			r.run();
 			ps2.executeUpdate();
 			txMgr.commit();
-		} catch (SecurityException | HeuristicMixedException | HeuristicRollbackException  e) {
+		} catch (SecurityException  | HeuristicMixedException | HeuristicRollbackException e) {
 			txMgr.rollback();
 			throw e;
 		} finally {
+			/*
+			 * Note when calling r.run() any exception from run is not know to this block and only finally is called, so in run() catch Throwable 
+			 * If not done still Thread is associated with currentThread, so RuntimeException is used in catch
+			 *  Note: A commit() or rollback() does automatically close the transaction and release assocation with thread - to know the issue remove catching RuntimeException
+			 */
+			// If not handled below is the way to cleanup in Arjuna which is not recommend, rightway to fix is handle exception correctly
+			ThreadActionData.purgeActions(Thread.currentThread());
 			xaCon1.close();
 			xaCon2.close();
 		}
-
+        
+		
 	}
 	
 }
