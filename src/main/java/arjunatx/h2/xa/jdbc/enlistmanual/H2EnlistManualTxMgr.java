@@ -9,6 +9,8 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.sql.ConnectionEvent;
+import javax.sql.ConnectionEventListener;
 import javax.sql.XAConnection;
 import javax.sql.XADataSource;
 import javax.transaction.HeuristicMixedException;
@@ -145,11 +147,13 @@ public class H2EnlistManualTxMgr {
 			//get XAConnection
 		XADataSource xaDS1 = getXADataSource(DB_1);
 		XAConnection xaCon1 = xaDS1.getXAConnection();
+		xaCon1.addConnectionEventListener(new ConnectionEventListenerImpl());
 		//enlist the connection XAResource
 		txMgr.getTransaction().enlistResource(xaCon1.getXAResource());
 		
 		XADataSource xaDS2 = getXADataSource(DB_2);
 		XAConnection xaCon2 = xaDS2.getXAConnection();
+		xaCon2.addConnectionEventListener(new ConnectionEventListenerImpl());
 		//enlist the connection XAResource
 		txMgr.getTransaction().enlistResource(xaCon2.getXAResource());
 		
@@ -168,7 +172,7 @@ public class H2EnlistManualTxMgr {
 			r.run();
 			ps2.executeUpdate();
 			txMgr.commit();
-		} catch (SecurityException | HeuristicMixedException | HeuristicRollbackException  e) {
+		} catch (RuntimeException | HeuristicMixedException | HeuristicRollbackException  e) {
 			txMgr.rollback();
 			throw e;
 		} finally {
@@ -176,5 +180,19 @@ public class H2EnlistManualTxMgr {
 			xaCon2.close();
 		}
 
+	}
+	
+	static class ConnectionEventListenerImpl implements ConnectionEventListener {
+
+		@Override
+		public void connectionClosed(ConnectionEvent event) {
+			System.out.println("******************************* ConnectionEventListener -> connectionClosed "+ event);
+		}
+
+		@Override
+		public void connectionErrorOccurred(ConnectionEvent event) {
+			System.out.println("******************************* ConnectionEventListener -> connectionErrorOccurred "+ event);
+		}
+		
 	}
 }
