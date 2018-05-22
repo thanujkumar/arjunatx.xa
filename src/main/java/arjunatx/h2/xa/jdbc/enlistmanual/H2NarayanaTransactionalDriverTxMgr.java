@@ -16,6 +16,9 @@ import javax.transaction.TransactionManager;
 
 import org.h2.jdbcx.JdbcDataSource;
 
+import com.arjuna.ats.internal.jdbc.DirectRecoverableConnection;
+import com.arjuna.ats.internal.jdbc.IndirectRecoverableConnection;
+//import com.arjuna.ats.internal.jdbc.drivers.PropertyFileDynamicClass;
 import com.arjuna.ats.jdbc.TransactionalDriver;
 
 import jndi.custom.LocalInitialContextFactory;
@@ -25,9 +28,12 @@ import jndi.custom.LocalInitialContextFactory;
  * Next we request connection from transaction driver and not directly from XADataSource as transactional driver
  * wraps connection and controls the connection by enlisting to active transaction.
  * 
+ * http://jbossts.blogspot.in/2017/12/narayana-jdbc-transactional-driver.html
+ * 
  * 3 possibilities on how we provide XADataSource to transactional driver 
  *  - Direct XADataSource
- *  - Indirect of providing XADataSource (thru JNDI)
+ *  - Indirect way of providing XADataSource (thru JNDI)
+ *  - Using dynamic class (this can be used the way we want to create XADataSource)
  * 
  */
 public class H2NarayanaTransactionalDriverTxMgr {
@@ -154,6 +160,45 @@ public class H2NarayanaTransactionalDriverTxMgr {
 		
 		// Verify whether commit or rollback based on exception set in processTx
 		verify();
+		
+		try {
+
+			// Using XADataSource with manual enlisted
+			processDynamicClassXADataSource(() -> {
+				try {
+					Thread.sleep(100);
+					// throw new RuntimeException();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			});
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		// Verify whether commit or rollback based on exception set in processTx
+		verify();
+		
+		
+		try {
+
+			// Using XADataSource with manual enlisted
+			processFileDynamicClassXADataSource(() -> {
+				try {
+					Thread.sleep(100);
+					// throw new RuntimeException();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			});
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		// Verify whether commit or rollback based on exception set in processTx
+		verify();
 				
 		// Print Registered Drivers
 		Enumeration<Driver> drivers = DriverManager.getDrivers();
@@ -164,6 +209,7 @@ public class H2NarayanaTransactionalDriverTxMgr {
 
 	/*
 	 * Here we are setting XADataSource
+	 * @see DirectRecoverableConnection
 	 */
 	public static void processDriverProvidedXADataSource(Runnable process) throws Exception {
 		String narayanaTransactionDriver = TransactionalDriver.arjunaDriver;
@@ -214,6 +260,7 @@ public class H2NarayanaTransactionalDriverTxMgr {
 
 	/*
 	 * XADataSource bound to JNDI, which is looked up by TransactionalDriver
+	 * @see IndirectRecoverableConnection
 	 */
 	public static void processIndirectDriverProvidedXADataSource(Runnable process) throws Exception {
 		/* Already registered above */
@@ -254,6 +301,99 @@ public class H2NarayanaTransactionalDriverTxMgr {
 		PreparedStatement ps2 = conn2.prepareStatement(InsertQuery);
 		ps2.setInt(1, 3);
 		ps2.setString(2, "Ajeeth-jnd2");
+
+		try {
+			ps1.executeUpdate();
+			process.run();
+			ps2.executeUpdate();
+			tm.commit();
+		} catch (Exception e) {
+			tm.rollback();
+			throw e;
+		} finally {
+			conn2.close();
+			conn1.close();
+		}
+	}
+	
+	
+	/*
+	 * Direct and controlled by dynamic class implementation 
+	 */
+	public static void processDynamicClassXADataSource(Runnable process) throws Exception {
+		/* Already registered above */
+		//DriverManager.registerDriver(new TransactionalDriver());
+		
+		Properties prop1 = new Properties();
+		prop1.put(TransactionalDriver.dynamicClass, ApproachLocalInstantiateDynamicClazz.class.getName());
+		//prop1.put(TransactionalDriver.userName, DB_USER);
+		//prop1.put(TransactionalDriver.password, DB_PASSWORD);
+		prop1.put(TransactionalDriver.poolConnections, true);
+		prop1.put(TransactionalDriver.maxConnections, 10);
+		Connection conn1 = DriverManager.getConnection(TransactionalDriver.arjunaDriver+DB_1, prop1);
+
+		Properties prop2 = new Properties();
+		prop2.put(TransactionalDriver.dynamicClass, ApproachLocalInstantiateDynamicClazz.class.getName());
+		//prop2.put(TransactionalDriver.userName, DB_USER);
+		//prop2.put(TransactionalDriver.password, DB_PASSWORD);
+		// No Pool
+		// prop2.put(TransactionalDriver.poolConnections, true);
+		// prop2.put(TransactionalDriver.maxConnections, 10);
+		Connection conn2 = DriverManager.getConnection(TransactionalDriver.arjunaDriver+DB_2, prop2);
+
+		TransactionManager tm = com.arjuna.ats.jta.TransactionManager.transactionManager();
+		tm.begin();
+
+		PreparedStatement ps1 = conn1.prepareStatement(InsertQuery);
+		ps1.setInt(1, 4);
+		ps1.setString(2, "Ajeeth-dynamic1");
+
+		PreparedStatement ps2 = conn2.prepareStatement(InsertQuery);
+		ps2.setInt(1, 4);
+		ps2.setString(2, "Ajeeth-dynamic2");
+
+		try {
+			ps1.executeUpdate();
+			process.run();
+			ps2.executeUpdate();
+			tm.commit();
+		} catch (Exception e) {
+			tm.rollback();
+			throw e;
+		} finally {
+			conn2.close();
+			conn1.close();
+		}
+	}
+
+
+	public static void processFileDynamicClassXADataSource(Runnable process) throws Exception {
+		/* Already registered above */
+		//DriverManager.registerDriver(new TransactionalDriver());
+		String propertyFile = "dynamic-property.properties";
+		
+		Properties prop1 = new Properties();
+		prop1.put(TransactionalDriver.dynamicClass, ApproachPropertiesInstantiateDynamicClazz.class.getName());
+		prop1.put(TransactionalDriver.poolConnections, true);
+		prop1.put(TransactionalDriver.maxConnections, 10);
+		Connection conn1 = DriverManager.getConnection(TransactionalDriver.arjunaDriver+DB_1+":"+propertyFile, prop1);
+
+		Properties prop2 = new Properties();
+		prop2.put(TransactionalDriver.dynamicClass, ApproachPropertiesInstantiateDynamicClazz.class.getName());
+		prop2.put(TransactionalDriver.poolConnections, true);
+		prop2.put(TransactionalDriver.maxConnections, 10);
+		Connection conn2 = DriverManager.getConnection(TransactionalDriver.arjunaDriver+DB_2+":"+propertyFile, prop2);
+
+		TransactionManager tm = com.arjuna.ats.jta.TransactionManager.transactionManager();
+		tm.begin();
+
+		PreparedStatement ps1 = conn1.prepareStatement(InsertQuery);
+		ps1.setInt(1, 5);
+		ps1.setString(2, "Ajeeth-dynamicFile1");
+
+		PreparedStatement ps2 = conn2.prepareStatement(InsertQuery);
+		ps2.setInt(1, 5);
+		ps2.setString(2, "Ajeeth-dynamicFile2");
 
 		try {
 			ps1.executeUpdate();

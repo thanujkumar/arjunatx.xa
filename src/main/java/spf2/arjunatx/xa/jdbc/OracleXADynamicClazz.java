@@ -13,8 +13,7 @@ import oracle.ucp.jdbc.PoolDataSourceFactory;
 import oracle.ucp.jdbc.PoolXADataSource;
 
 public class OracleXADynamicClazz implements DynamicClass {
-	
-	DriverManagerDataSource a;
+	 
 	 private static final String driverName = "oracle:";
 	 private static final String semicolon = ";";
 	    
