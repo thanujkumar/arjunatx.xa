@@ -16,6 +16,26 @@ import oracle.jdbc.xa.client.OracleXADataSource;
  */
 public class OracleEnlistManualTxMgr {
 	
+	static XADataSource getDS1() throws SQLException {
+		//Get XADataSource
+		OracleXADataSource xaDS1 = new OracleXADataSource();
+		//set XADataSource with information for connection to happen
+		xaDS1.setURL("jdbc:oracle:thin:@localhost:1521/orcl");
+		xaDS1.setUser("testdb1");
+		xaDS1.setPassword("testdb");
+        return xaDS1;
+	}
+
+	static XADataSource getDS2() throws SQLException {
+		//Get XADataSource
+		OracleXADataSource xaDS1 = new OracleXADataSource();
+		//set XADataSource with information for connection to happen
+		xaDS1.setURL("jdbc:oracle:thin:@localhost:1521/orcl");
+		xaDS1.setUser("testdb2");
+		xaDS1.setPassword("testdb");
+        return xaDS1;
+	}
+	
 	public static void main(String[] args) throws Exception {
 		
 		TransactionManager txMgr = com.arjuna.ats.jta.TransactionManager.transactionManager();
@@ -59,23 +79,5 @@ public class OracleEnlistManualTxMgr {
 		
 	}
 	
-	static XADataSource getDS1() throws SQLException {
-		//Get XADataSource
-		OracleXADataSource xaDS1 = new OracleXADataSource();
-		//set XADataSource with information for connection to happen
-		xaDS1.setURL("jdbc:oracle:thin:@localhost:1521/orcl");
-		xaDS1.setUser("testdb1");
-		xaDS1.setPassword("testdb");
-        return xaDS1;
-	}
 
-	static XADataSource getDS2() throws SQLException {
-		//Get XADataSource
-		OracleXADataSource xaDS1 = new OracleXADataSource();
-		//set XADataSource with information for connection to happen
-		xaDS1.setURL("jdbc:oracle:thin:@localhost:1521/orcl");
-		xaDS1.setUser("testdb2");
-		xaDS1.setPassword("testdb");
-        return xaDS1;
-	}
 }

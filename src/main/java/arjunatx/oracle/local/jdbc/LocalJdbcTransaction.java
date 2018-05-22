@@ -1,4 +1,4 @@
-package spf2.arjunatx.local.jdbc;
+package arjunatx.oracle.local.jdbc;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -67,6 +67,7 @@ public class LocalJdbcTransaction {
            
             conn2.commit();
         } catch (Exception e) {
+        	e.printStackTrace();
             conn1.rollback();
             conn2.rollback();
         } finally {
