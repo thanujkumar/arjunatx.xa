@@ -10,7 +10,7 @@ grant create session, create table, create view, create sequence, create procedu
 
 #-- Table 
 
-   CREATE TABLE "TESTDB1".TEST_TX1 
+   CREATE TABLE "TESTDB1".TEST_TX2 
    (
     ID VARCHAR2(30) NOT NULL ENABLE, 
    NAME VARCHAR2(30) NOT NULL ENABLE, 
