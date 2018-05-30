@@ -27,11 +27,16 @@ public class PoolEnabledDataSource extends Logging {
 	public static void main(String[] args) throws Exception {
 		PoolDataSource pool = initPool();
         testDB1(pool);	
+        printStatistics(pool);
 	    testDB2(pool);
+	    printStatistics(pool);
 	    testWhichSchema(pool);
+	    printStatistics(pool);
 	    Thread.sleep(10000);
-	    
+    
 	}
+	
+
 	
 	public static void testDB1(PoolDataSource pool) throws Exception {
 		Connection con1 = pool.getConnection("TESTDB1", "testdb");

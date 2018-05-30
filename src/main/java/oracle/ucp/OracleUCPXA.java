@@ -8,6 +8,8 @@ import java.util.Set;
 
 import javax.sql.XAConnection;
 
+import oracle.ucp.admin.UniversalConnectionPoolManager;
+import oracle.ucp.admin.UniversalConnectionPoolManagerImpl;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 import oracle.ucp.jdbc.PoolXADataSource;
 
@@ -18,6 +20,8 @@ public class OracleUCPXA  extends Logging {
 	static String user = "appdata";
 
 	public static void main(String[] args) throws Exception {
+		UniversalConnectionPoolManager ucpm = UniversalConnectionPoolManagerImpl.getUniversalConnectionPoolManager();
+		
 		printThreads();
 		
 		PoolXADataSource pool = PoolDataSourceFactory.getPoolXADataSource(); //XA
@@ -52,6 +56,8 @@ public class OracleUCPXA  extends Logging {
 		con.close();
 
 		printThreads();
+		
+		ucpm.destroyConnectionPool(pool.getConnectionPoolName());
 	}
 	
 	private static void printThreads() {

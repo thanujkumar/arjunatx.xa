@@ -51,6 +51,8 @@ public class OracleUCPNonXA  extends Logging{
 			System.out.println(rs.getString(1));
 		}
 
+		printStatistics(pool);
+		
 		rs.close();
 		con.close();
 		printThreads();
@@ -58,6 +60,8 @@ public class OracleUCPNonXA  extends Logging{
 		for (String s : ucpm.getConnectionPoolNames()) {
 			System.out.println(s);
 		}
+		
+		printStatistics(pool);
 		
 		ucpm.destroyConnectionPool(pool.getConnectionPoolName());
 	}
