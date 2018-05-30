@@ -26,13 +26,15 @@ public abstract class Logging {
     }
 	
 	public static void  printStatistics(PoolDataSource ds) throws Exception {
+		
 		System.out.println("----------------------------------------------------------");
-		System.out.println("Initial Pool Size : "+ ds.getInitialPoolSize());
-		System.out.println("Max Pool Size : "+ ds.getMaxPoolSize());
-		System.out.println("Available Connections : "+ ds.getAvailableConnectionsCount());
-		System.out.println("Borrowed Connections : "+ ds.getBorrowedConnectionsCount());
-		System.out.println("Max Reuse Count : "+ ds.getMaxConnectionReuseCount());
-		System.out.println("Connection Pool Name : "+ ds.getConnectionPoolName());
+		System.out.println(ds.getStatistics());
+//		System.out.println("Initial Pool Size : "+ ds.getInitialPoolSize());
+//		System.out.println("Max Pool Size : "+ ds.getMaxPoolSize());
+//		System.out.println("Available Connections : "+ ds.getAvailableConnectionsCount());
+//		System.out.println("Borrowed Connections : "+ ds.getBorrowedConnectionsCount());
+//		System.out.println("Max Reuse Count : "+ ds.getMaxConnectionReuseCount());
+//		System.out.println("Connection Pool Name : "+ ds.getConnectionPoolName());
 		System.out.println("----------------------------------------------------------");
 	}
 }
