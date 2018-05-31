@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.util.Set;
 
 import javax.sql.XAConnection;
 
@@ -13,8 +12,10 @@ import oracle.ucp.admin.UniversalConnectionPoolManagerImpl;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 import oracle.ucp.jdbc.PoolXADataSource;
 
-public class OracleUCPXA  extends Logging {
+public class OracleUCPXA  extends Logging { 
 	
+	static String _url2 = "jdbc:oracle:thin:@(DESCRIPTION_LIST=(LOAD_BALANCE=ON)(FAILOVER=ON)(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=orcl)))(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=127.0.1)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=orcl))))";
+	static String _url = "jdbc:oracle:thin:@(DESCRIPTION=(SOURCE_ROUTE=YES) (ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=orcl)))";
 	static String url = "jdbc:oracle:thin:@localhost:1521/orcl";
 	static String password = "app";
 	static String user = "appdata";
@@ -26,11 +27,13 @@ public class OracleUCPXA  extends Logging {
 		
 		PoolXADataSource pool = PoolDataSourceFactory.getPoolXADataSource(); //XA
 		pool.setConnectionFactoryClassName("oracle.jdbc.xa.client.OracleXADataSource");
-		pool.setURL(url);
+		pool.setURL(_url2);
 		pool.setUser(user);
 		pool.setPassword(password);
 		pool.setInitialPoolSize(2);
 		pool.setMaxPoolSize(5);
+		pool.setFastConnectionFailoverEnabled(true);
+		//pool.setONSConfiguration(arg0);
 
 		XAConnection xaCon = pool.getXAConnection(); // This is com.sun.proxy object
 
@@ -59,17 +62,5 @@ public class OracleUCPXA  extends Logging {
 		
 		ucpm.destroyConnectionPool(pool.getConnectionPoolName());
 	}
-	
-	private static void printThreads() {
-		Set<Thread> threads = Thread.getAllStackTraces().keySet();
-		System.out.println("---------------------------------------------");
-		for (Thread t : threads) {
-			String name = t.getName();
-		    Thread.State state = t.getState();
-		    int priority = t.getPriority();
-		    String type = t.isDaemon() ? "Daemon" : "Normal";
-		    System.out.printf("%-20s \t %s \t %d \t %s\n", name, state, priority, type);
-		}
-		System.out.println("---------------------------------------------");
-	}
+
 }

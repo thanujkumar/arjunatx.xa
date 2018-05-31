@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.util.Set;
 
 import javax.sql.XAConnection;
 
@@ -65,20 +64,5 @@ public class OracleUCPNonXA  extends Logging{
 		
 		ucpm.destroyConnectionPool(pool.getConnectionPoolName());
 	}
-
-	
-	private static void printThreads() {
-		Set<Thread> threads = Thread.getAllStackTraces().keySet();
-		System.out.println("---------------------------------------------");
-		for (Thread t : threads) {
-			String name = t.getName();
-		    Thread.State state = t.getState();
-		    int priority = t.getPriority();
-		    String type = t.isDaemon() ? "Daemon" : "Normal";
-		    System.out.printf("%-20s \t %s \t %d \t %s\n", name, state, priority, type);
-		}
-		System.out.println("---------------------------------------------");
-	}
-	
 	
 }
