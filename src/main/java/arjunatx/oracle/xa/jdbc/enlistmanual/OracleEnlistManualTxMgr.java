@@ -18,6 +18,7 @@ import javax.transaction.HeuristicRollbackException;
 import javax.transaction.TransactionManager;
 
 import oracle.jdbc.xa.client.OracleXADataSource;
+import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 import oracle.ucp.jdbc.PoolXADataSource;
 
@@ -40,6 +41,14 @@ public class OracleEnlistManualTxMgr {
 		Logger app2 = Logger.getLogger("com.arjuna");
 		app2.setLevel(Level.FINEST);
 		app2.addHandler(consoleHandler);
+	}
+	
+	
+	public static void  printStatistics(PoolDataSource ds) throws Exception {
+		System.out.println("----------------------------------------------------------");
+		System.out.println(ds.getConnectionPoolName());
+		System.out.println(ds.getStatistics());
+		System.out.println("----------------------------------------------------------");
 	}
 	
 	static XADataSource getOracleXA(String user, String password) throws SQLException {
@@ -79,7 +88,9 @@ public class OracleEnlistManualTxMgr {
 		
 		//get XAConnection
 		XADataSource xaDS1 = getOracleXA("TESTDB1","testdb");
+		printStatistics((PoolDataSource) xaDS1);
 		XADataSource xaDS2 = getOracleXA("TESTDB2","testdb");
+		printStatistics((PoolDataSource) xaDS2);
 		
 		TransactionManager txMgr = com.arjuna.ats.jta.TransactionManager.transactionManager();
 		txMgr.begin();
