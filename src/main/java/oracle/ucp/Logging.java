@@ -16,6 +16,7 @@ public abstract class Logging {
 		 ConsoleHandler consoleHandler = new ConsoleHandler();
 		 consoleHandler.setLevel(Level.ALL);
 		 consoleHandler.setFormatter(new SimpleFormatter());
+		 //consoleHandler.setFormatter(new oracle.ucp.util.logging.UCPFormatter());
 
 		 Logger app1 = Logger.getLogger("oracle.ucp"); // If you want to log everything just create logger with empty string
         app1.setLevel(Level.FINEST);
