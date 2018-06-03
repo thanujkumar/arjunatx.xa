@@ -19,12 +19,16 @@ public abstract class Logging {
 		 //consoleHandler.setFormatter(new oracle.ucp.util.logging.UCPFormatter());
 
 		 Logger app1 = Logger.getLogger("oracle.ucp"); // If you want to log everything just create logger with empty string
-        app1.setLevel(Level.FINEST);
-        app1.addHandler(consoleHandler);
+         app1.setLevel(Level.FINEST);
+         app1.addHandler(consoleHandler);
         
-        Logger app2 = Logger.getLogger("com.arjuna");
-        app2.setLevel(Level.FINEST);
-        app2.addHandler(consoleHandler);
+         Logger app2 = Logger.getLogger("oracle.jdbc"); // If you want to log everything just create logger with empty string
+         app2.setLevel(Level.FINEST);
+         app2.addHandler(consoleHandler);
+         
+         Logger app3 = Logger.getLogger("com.arjuna");
+         app3.setLevel(Level.FINEST);
+         app3.addHandler(consoleHandler);
     }
 	
 	public static void  printStatistics(PoolDataSource ds) throws Exception {
