@@ -65,11 +65,7 @@ public class OracleXAUCPProperties {
 		 * setSQLForValidateConnection property
 		 */
 		pool.setSecondsToTrustIdleConnection(10); //till 10seconds no validation when borrowed
-		
-		// For pool to initialize we need to call XAConnection first time
-		XAConnection xacon = pool.getXAConnection();
-		xacon.close();
-	}
+ 	}
 
 
 	public static void main(String[] args) throws Exception {

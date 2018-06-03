@@ -61,7 +61,7 @@ public class OracleUCPXACallback {
 		pool.setInitialPoolSize(5);
 		pool.setMaxPoolSize(10);
 		
-		// For pool to initialize we need to call XAConnection first time
+		// For JMX  pool to be initialized we need to call XAConnection first time
 		XAConnection xacon = pool.getXAConnection();
 		xacon.close();
 		checkMBean();
