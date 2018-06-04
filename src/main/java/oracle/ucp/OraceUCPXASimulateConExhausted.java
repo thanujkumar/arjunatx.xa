@@ -40,10 +40,21 @@ public class OraceUCPXASimulateConExhausted extends Logging {
 	public static void main(String[] args) throws Exception {
 		createPool();
 		
+		/*
+		 * The setInvalid method of the ValidConnection interface indicates that a
+		 * connection should be removed from the connection pool when it is closed. The
+		 * method is typically used when a connection is no longer usable, such as after
+		 * an exception or if the isValid method of the ValidConnection interface
+		 * returns false. The method can also be used if an application deems the state
+		 * on a connection to be bad
+		 */
+		
+		
 		for (int i = 0; i <= 15; i++) {
 			try {
-
+				
 				XAConnection xacon = pool.getXAConnection();
+				
 				System.out.println("oracle.ucp.jdbc.ValidConnection.isValid : "	+ ((oracle.ucp.jdbc.ValidConnection) xacon).isValid());
 
 				Connection con = xacon.getConnection();
@@ -55,8 +66,8 @@ public class OraceUCPXASimulateConExhausted extends Logging {
 				}
 
 				System.out.println("Is current connection valid : " + con.isValid(0));
-				// rs.close();
-				// con.close();
+				rs.close();
+				con.close();
 				System.out.println("Is current connection valid : " + con.isValid(0));
 
 				System.out.println("oracle.ucp.jdbc.ValidConnection.isValid : "	+ ((oracle.ucp.jdbc.ValidConnection) xacon).isValid());
@@ -64,6 +75,7 @@ public class OraceUCPXASimulateConExhausted extends Logging {
 				e.printStackTrace();
 			}
 		}
+		
 
 		//Thread.sleep(100000);
 		ucpm.destroyConnectionPool(pool.getConnectionPoolName());

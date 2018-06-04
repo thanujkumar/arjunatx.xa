@@ -9,6 +9,7 @@ import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.logging.LogManager;
 
 import javax.sql.XAConnection;
@@ -19,7 +20,17 @@ import oracle.ucp.jdbc.ConnectionInitializationCallback;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 import oracle.ucp.jdbc.PoolXADataSource;
 
+
+/*
+ * The ConnectionInitializationCallback mechanism appears to be a part of the
+ * "Application Continuity" feature released with 12c. Application Continuity
+ * requires that you use one of the following DataSource implementations:
+ * 
+ * oracle.jdbc.replay.OracleDataSourceImpl
+ * oracle.jdbc.replay.OracleConnectionPoolDataSourceImpl
+ */
 public class OracleUCPXACallback {
+
 
 	static {
 
@@ -54,7 +65,10 @@ public class OracleUCPXACallback {
 		// ucpm.setLogLevel(Level.FINEST);
 
 		pool = PoolDataSourceFactory.getPoolXADataSource(); // XA
-		pool.setConnectionFactoryClassName("oracle.jdbc.xa.client.OracleXADataSource");
+		//pool.setConnectionFactoryClassName("oracle.jdbc.xa.client.OracleXADataSource");
+		//http://mirrors.iyunwei.com/oracle/docs/12.1-E16655-01/java.121/e17659/app_cont.htm#JJUCP8254
+		pool.setConnectionFactoryClassName("oracle.jdbc.replay.OracleXADataSourceImpl");
+		//pool.setConnectionFactoryClassName("oracle.jdbc.replay.OracleDataSourceImpl");
 		pool.setURL(url);
 		pool.setUser(user);
 		pool.setPassword(password);
@@ -62,8 +76,21 @@ public class OracleUCPXACallback {
 		pool.setMaxPoolSize(10);
 		
 		// For JMX  pool to be initialized we need to call XAConnection first time
-		XAConnection xacon = pool.getXAConnection();
-		xacon.close();
+		//XAConnection xacon = pool.getXAConnection();
+		//xacon.close();
+		//OR
+		ucpm.createConnectionPool((UniversalConnectionPoolAdapter) pool);
+
+		
+		
+		pool.registerConnectionInitializationCallback(new ConnectionInitializationCallbackImpl());
+		/*
+		 * If an application cannot use connection labeling because it cannot be changed, then the connection initialization callback is provided for such an application
+		 * This callback is not used if a labeling callback is registered for the connection pool.
+		 */
+		pool.registerConnectionLabelingCallback(new ConnectionLabelingCallbackImpl());
+		
+		
 		checkMBean();
 	}
 
@@ -83,9 +110,11 @@ public class OracleUCPXACallback {
 
 	public static void main(String[] args) throws Exception {
 		createPool();
-		pool.registerConnectionInitializationCallback(new ConnectionInitializationCallbackImpl());
-
-		XAConnection xacon = pool.getXAConnection();
+		
+		Properties requestLabels = new Properties();
+		requestLabels.put("SCHEMA", "test");
+		
+		XAConnection xacon = pool.getXAConnection(user, password, requestLabels);
 		
 		Connection con = xacon.getConnection();
 
@@ -118,5 +147,24 @@ public class OracleUCPXACallback {
 			}
 		}
 
+	}
+	
+	
+	static class ConnectionLabelingCallbackImpl implements ConnectionLabelingCallback {
+
+		@Override
+		public boolean configure(Properties requestedLabels, Object connection) {
+			System.out.println("Configure Connection Object -> "+ connection);
+			System.out.println("Configure Connection Requested Label Properties - > "+ requestedLabels);
+			return false;
+		}
+
+		@Override
+		public int cost(Properties requestedLabels, Properties currentLabels) {
+			System.out.println("cost Current Labels  -> "+ currentLabels);
+			System.out.println("cost Requested Label Properties - > "+ requestedLabels);
+			return 0;
+		}
+		
 	}
 }

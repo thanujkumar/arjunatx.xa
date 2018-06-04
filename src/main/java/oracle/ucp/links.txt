@@ -1,3 +1,4 @@
 https://github.com/oracle/oracle-db-examples/tree/master/java/jdbc
 https://martincarstenbach.wordpress.com/2011/02/03/getting-up-and-running-with-universal-connection-pool/
 https://blogs.oracle.com/dbstorage/advanced-network-compression-a-lesser-known-feature-of-advanced-compression
+ https://laurent-leturgez.com/2015/06/01/oracle-12c-application-continuity-and-its-resources-usage/
