@@ -29,7 +29,7 @@ import oracle.ucp.jdbc.oracle.OracleJDBCConnectionPoolStatistics;
  * @see OracleUCPSingleMultitenantSharedPool - for instructions
  *
  */
-public class OracleUCPDataSourcePerTenantSharedPool {
+public class OracleUCPDataSourcePerTenantSharedPool extends Logging {
   /* This require XML configuration */
 	static {
 		URL url = ClassLoader.getSystemClassLoader().getResource("DS_Per_PDB_SharePool.xml");
@@ -53,31 +53,36 @@ public class OracleUCPDataSourcePerTenantSharedPool {
 	      testConnection(pds2Conn);
 	      pds2Conn.close();
 	      
-	      final int COUNT = 5;
-	      Connection conn[] = new Connection[COUNT];
+	      int COUNT1 = 12;
+	      Connection conn1[] = new Connection[COUNT1];
 	      // Borrow 5 connections of pdb1 service using datasource pds1
-	      for (int i = 0; i < COUNT; i++) {
-	        conn[i] = pds1.getConnection();
+	      for (int i = 0; i < COUNT1; i++) {
+	        conn1[i] = pds1.getConnection();
 	      }
 	      
 	      String pdb1_table = "SYSPDB1.TABLE_PDB1";
 	      // Return the connections to pool
-	      for (int i = 0; i < COUNT; i++) {
-	        if (conn[i] != null) {
-	        	new Thread(new ResultSetThread(conn[i], pdb1_table)).start();
+	      for (int i = 0; i < COUNT1; i++) {
+	        if (conn1[i] != null) {
+	        	new Thread(new ResultSetThread(conn1[i], pdb1_table)).start();
 	        }
 	      }
+	      
+	      int COUNT2 = 20;
+	      Connection conn2[] = new Connection[COUNT2];
+	    		  
 	      // Borrow 5 connections of pdb2 service using datasource pds2
-	      for (int i = 0; i < COUNT; i++) {
-	        conn[i] = pds2.getConnection();
+	      for (int i = 0; i < COUNT2; i++) {
+	        conn2[i] = pds2.getConnection();
 	      }
+	      
 	      
 	      String pdb2_table = "SYSPDB2.TABLE_PDB2";
 	      
 	      // Return the connections to pool
-	      for (int i = 0; i < COUNT; i++) {
-	        if (conn[i] != null) {
-	        	new Thread(new ResultSetThread(conn[i], pdb2_table)).start();
+	      for (int i = 0; i < COUNT2; i++) {
+	        if (conn2[i] != null) {
+	        	new Thread(new ResultSetThread(conn2[i], pdb2_table)).start();
 	        }
 	      }
 	      // Print UCP pool statistics for pool1

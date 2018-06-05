@@ -10,6 +10,7 @@ import oracle.ucp.admin.UniversalConnectionPoolManager;
 import oracle.ucp.admin.UniversalConnectionPoolManagerImpl;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
+import oracle.ucp.jdbc.oracle.OracleJDBCConnectionPoolStatistics;
 
 /*
  * https://blogs.oracle.com/dev2dev/ucp-multi-tenant-shared-pool-configuration
@@ -138,9 +139,23 @@ public class OracleUCPSingleMultitenantSharedPool extends Logging{
 		rs.close();
 		conPdb1.close();
 		
+		printPoolStatistics(multiTenantDS.getConnectionPoolName());
+		
 		ucpm.destroyConnectionPool(multiTenantDS.getConnectionPoolName());
 	}
     
+	static void printPoolStatistics(String poolName) throws Exception{
+	      
+	      UniversalConnectionPool pool = UniversalConnectionPoolManagerImpl.getUniversalConnectionPoolManager().getConnectionPool(poolName);
+	      
+	      OracleJDBCConnectionPoolStatistics stats = (OracleJDBCConnectionPoolStatistics) pool.getStatistics();
+	      
+	      System.out.println("Pool : " + poolName + " --> Connection # Repurpose Count = " + stats.getConnectionRepurposeCount());
+	      System.out.println("Available Connection Count = " + stats.getAvailableConnectionsCount());
+	      System.out.println("Borrowed Connection Count = "  + stats.getBorrowedConnectionsCount());
+
+	}
+	
     static void testConnection(Connection conn) throws SQLException {
         Statement stmt = null;
         ResultSet rs = null;

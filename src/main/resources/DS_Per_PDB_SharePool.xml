@@ -6,7 +6,7 @@
 	<connection-pool
 		connection-factory-class-name="oracle.jdbc.pool.OracleDataSource"
 		connection-pool-name="pool1" initial-pool-size="10"
-		max-connections-per-service="15" max-pool-size="30" min-pool-size="2"
+		max-connections-per-service="30" max-pool-size="30" min-pool-size="2"
 		password="pdbmaster" shared="true"
 		url="jdbc:oracle:thin:@(DESCRIPTION=(SOURCE_ROUTE=YES) (ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=cdb12)))"
 		user="c##pdbmaster">
