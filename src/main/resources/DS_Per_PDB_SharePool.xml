@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ucp-properties
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="configuration.xsd">
+
+	<connection-pool
+		connection-factory-class-name="oracle.jdbc.pool.OracleDataSource"
+		connection-pool-name="pool1" initial-pool-size="10"
+		max-connections-per-service="15" max-pool-size="30" min-pool-size="2"
+		password="pdbmaster" shared="true"
+		url="jdbc:oracle:thin:@(DESCRIPTION=(SOURCE_ROUTE=YES) (ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=cdb12)))"
+		user="c##pdbmaster">
+		<connection-property name="oracle.jdbc.ReadTimeout" value="2000" />
+    	<connection-property name="oracle.net.OUTBOUND_CONNECT_TIMEOUT" value="2000" />
+        
+		<data-source data-source-name="pds1" description="pdb1 data source" service="pdb1" />
+		<data-source data-source-name="pds2" description="pdb2 data source" service="pdb2" />
+		
+	</connection-pool>
+</ucp-properties>

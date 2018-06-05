@@ -14,14 +14,14 @@ import oracle.ucp.jdbc.PoolDataSourceFactory;
 /*
  * https://blogs.oracle.com/dev2dev/ucp-multi-tenant-shared-pool-configuration
  * 
- * • Only the JDBC Thin driver supports the Shared Pool feature, and not the
+ * ï¿½ Only the JDBC Thin driver supports the Shared Pool feature, and not the
  * JDBC OCI driver.
  * 
- * • For using this feature, you must use an XML configuration file.
+ * ï¿½ For using this feature, you must use an XML configuration file.
  * 
  * Following are the two scenarios in which this feature can be implemented:
- *  • Single Multitenant Data Source Using Shared Pool
- *  • One Data Source per Tenant Using Shared Pool
+ *  ï¿½ Single Multitenant Data Source Using Shared Pool
+ *  ï¿½ One Data Source per Tenant Using Shared Pool
  *  
  *  ----CREATING PDB's, each PDB can have multiple schema's------------
  *  login as sysdba (user/password@localhost:1521/orcl as sysdba)
@@ -29,7 +29,7 @@ import oracle.ucp.jdbc.PoolDataSourceFactory;
  *  select * from v$pdbs; [Shows current pdb your are connected to]
  *  alter session set container=cdb$root; [now selecting from v$pdbs shows all pdbs and seed from root container]
  *  
-	CREATE PLUGGABLE DATABASE pdb4 ADMIN USER syspdb1 identified by "syspdb1"
+	CREATE PLUGGABLE DATABASE pdb1 ADMIN USER syspdb1 identified by "syspdb1"
 	DEFAULT TABLESPACE USERS
 	DATAFILE '/u01/app/oracle/oradata/cdb12/orcl/pdb1.dbf'
 	SIZE 200M AUTOEXTEND ON
