@@ -23,13 +23,14 @@ public class OracleUCPLabelingCallback {
 		
 		
 		pool = new oracle.ucp.jdbc.PoolDataSourceImpl();
-		pool.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
-		//pool.setConnectionFactoryClassName("oracle.jdbc.replay.OracleDataSourceImpl");
+		//pool.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
+		pool.setConnectionFactoryClassName("oracle.jdbc.replay.OracleDataSourceImpl");
 		pool.setURL(url);
 		pool.setUser(user);
 		pool.setPassword(password);
 		pool.setInitialPoolSize(5);
 		pool.setMaxPoolSize(10);
+		pool.setFastConnectionFailoverEnabled(true);
 		pool.registerConnectionLabelingCallback(new UCPConnectionLabellingCallback());
 
 	}

@@ -129,6 +129,7 @@ public class OracleUCPDataSourcePerTenantSharedPool extends Logging {
 	      System.out.println("Pool : " + poolName + " --> Connection # Repurpose Count = " + stats.getConnectionRepurposeCount());
 	      System.out.println("Available Connection Count = " + stats.getAvailableConnectionsCount());
 	      System.out.println("Borrowed Connection Count = "  + stats.getBorrowedConnectionsCount());
+	      System.out.println(pool.getStatistics());
 
 	}
 	

@@ -6,9 +6,9 @@
 	<connection-pool
 		connection-factory-class-name="oracle.jdbc.pool.OracleDataSource"
 		connection-pool-name="pool1" initial-pool-size="10"
-		max-connections-per-service="30" max-pool-size="30" min-pool-size="2"
+		max-connections-per-service="30" max-pool-size="30" min-pool-size="2" validate-connection-on-borrow="true" 
 		password="pdbmaster" shared="true"
-		url="jdbc:oracle:thin:@(DESCRIPTION=(SOURCE_ROUTE=YES) (ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=cdb12)))"
+		url="jdbc:oracle:thin:@(DESCRIPTION=(SOURCE_ROUTE=YES) (LOAD_BALANCE=on) (ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=cdb12)))"
 		user="c##pdbmaster">
 		<connection-property name="oracle.jdbc.ReadTimeout" value="2000" />
     	<connection-property name="oracle.net.OUTBOUND_CONNECT_TIMEOUT" value="2000" />
