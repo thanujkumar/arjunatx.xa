@@ -15,7 +15,7 @@ import javax.sql.XADataSource;
 
 import org.h2.jdbcx.JdbcDataSource;
 
-public class DSFactory {
+public class H2DSFactory {
 
 	 static final String DB_DRIVER = "org.h2.Driver";
 	 static final String DB_URL = "jdbc:h2:mem:%s;DB_CLOSE_DELAY=-1";

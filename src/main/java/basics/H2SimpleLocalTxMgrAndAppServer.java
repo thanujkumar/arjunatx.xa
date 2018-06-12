@@ -8,23 +8,23 @@ import javax.sql.XAConnection;
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 
-import basics.DSFactory.H2WrapperDataSouce;
+import basics.H2DSFactory.H2WrapperDataSouce;
 
-public class SimpleLocalTxMgrAndAppServer {
+public class H2SimpleLocalTxMgrAndAppServer {
 
 	static H2WrapperDataSouce getDataSource(String DB_NAME) throws Exception{
-		H2WrapperDataSouce ds = DSFactory.getDataSource();
-		ds.setURL(String.format(DSFactory.DB_URL, DB_NAME));
-		ds.setPassword(DSFactory.DB_PASSWORD);
-		ds.setUser(DSFactory.DB_USER);
+		H2WrapperDataSouce ds = H2DSFactory.getDataSource();
+		ds.setURL(String.format(H2DSFactory.DB_URL, DB_NAME));
+		ds.setPassword(H2DSFactory.DB_PASSWORD);
+		ds.setUser(H2DSFactory.DB_USER);
 		return ds;
 	}
 	
 	//Test with single datasource
 	public static void main(String[] args) throws Exception {
-		H2WrapperDataSouce ds = getDataSource(DSFactory.DB_1);
+		H2WrapperDataSouce ds = getDataSource(H2DSFactory.DB_1);
 		
-		XAConnection xaCon = ds.getXAConnection(DSFactory.DB_USER, DSFactory.DB_PASSWORD);
+		XAConnection xaCon = ds.getXAConnection(H2DSFactory.DB_USER, H2DSFactory.DB_PASSWORD);
 		XAResource xaRes = xaCon.getXAResource();
 		
 		Connection con = xaCon.getConnection();
@@ -35,7 +35,7 @@ public class SimpleLocalTxMgrAndAppServer {
 		try {
 			xaRes.start(xid, XAResource.TMNOFLAGS);
 			
-            pstmt = con.prepareStatement(DSFactory.InsertQuery);
+            pstmt = con.prepareStatement(H2DSFactory.InsertQuery);
 			pstmt.setInt(1, 2);
 			pstmt.setString(2, "XATest");
 			pstmt.executeUpdate();
