@@ -144,8 +144,7 @@
 
 		<!-- Oracle -->
 		<!-- https://softwarecave.org/2014/06/14/adding-external-jars-into-maven-project/ -->
-		<!-- mvn install:install-file -Dfile=ojdbc8-12.2.0.1.jar -DgroupId=com.oracle 
-			-DartifactId=ojdbc8 -Dversion=12.2.0.1 -Dpackaging=jar -->
+		<!-- mvn install:install-file -Dfile=ons-12.1.0.2.jar  -DgroupId=com.oracle.jdbc -DartifactId=ons -Dversion=12.1.0.2 -Dpackaging=jar -->
 		<dependency>
 			<groupId>com.oracle</groupId>
 			<artifactId>ojdbc8</artifactId>
