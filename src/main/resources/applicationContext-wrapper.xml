@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+
+	<bean id="dataSourceTestdb1"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+		<property name="driverClassName" value="com.arjuna.ats.jdbc.TransactionalDriver" />
+		<property name="url" value="jdbc:arjuna:h2:mem:testdb1;DB_CLOSE_DELAY=-1" />
+		<property name="connectionProperties">
+		    <props>
+				<prop key="DYNAMIC_CLASS">basics.wrapper.H2DynamicClassWrapper</prop>
+				<prop key="POOL_CONNECTIONS">true</prop>
+				<prop key="MAXCONNECTIONS">10</prop>
+			</props>
+		</property>
+	</bean>
+
+
+    <bean id="dataSourceTestdb2"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+		<property name="driverClassName" value="com.arjuna.ats.jdbc.TransactionalDriver" />
+		<property name="url" value="jdbc:arjuna:h2:mem:testdb2;DB_CLOSE_DELAY=-1" />
+		<property name="connectionProperties">
+		<props>
+				<prop key="DYNAMIC_CLASS">basics.wrapper.H2DynamicClassWrapper</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- TX Configuration -->
+	<bean id="arjunaTransactionManager" class="com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionManagerImple" />
+
+	<bean id="arjunaUserTransaction" class="com.arjuna.ats.internal.jta.transaction.arjunacore.UserTransactionImple" />
+	<!--  bean id="arjunaUserTransaction" class="com.arjuna.ats.jta.UserTransaction"  factory-method="userTransaction"/ -->
+
+	<bean id="transactionManager"	class="org.springframework.transaction.jta.JtaTransactionManager">
+		<property name="transactionManager"	ref="arjunaTransactionManager" />
+		<property name="userTransaction" ref="arjunaUserTransaction" />
+	</bean>
+	
+	 <!-- DAO -->
+   <bean id="testDb1DAO" class="basics.wrapper.test.spf2.H2DbOperationDAO">
+      <property name="dataSource" ref="dataSourceTestdb1" />
+   </bean>  
+
+   <bean id="testDb2DAO" class="basics.wrapper.test.spf2.H2DbOperationDAO">
+      <property name="dataSource" ref="dataSourceTestdb2" />
+   </bean>  
+   
+   <!-- Beans to apply transactions services-->
+   <bean id="operationServiceTarget" class="basics.wrapper.test.spf2.H2DbService" >
+      <property name="testDB1DAO" ref="testDb1DAO" />
+      <property name="testDB2DAO" ref="testDb2DAO" />
+   </bean>
+   
+    <!-- where to apply transaction sematics -->
+   <bean id="operationService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+      <property name="transactionManager" ref="transactionManager" />
+      <property name="target" ref="operationServiceTarget" />
+      <property name="transactionAttributes"> 
+         <props>
+           <prop key="doTx*">PROPAGATION_REQUIRED,-RuntimeException</prop>
+         </props>
+      </property>
+    </bean>
+    
+</beans>

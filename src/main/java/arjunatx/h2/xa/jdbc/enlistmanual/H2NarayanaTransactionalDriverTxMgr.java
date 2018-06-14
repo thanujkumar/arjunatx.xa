@@ -216,7 +216,7 @@ public class H2NarayanaTransactionalDriverTxMgr {
 
 		XADataSource xaDS1 = getXADataSource(DB_1);
 		Properties prop1 = new Properties();
-		prop1.put(TransactionalDriver.XADataSource, xaDS1);
+		prop1.put(TransactionalDriver.XADataSource, xaDS1); //Telling TransctionalDriver where to get Connections
 		prop1.put(TransactionalDriver.userName, DB_USER);
 		prop1.put(TransactionalDriver.password, DB_PASSWORD);
 		prop1.put(TransactionalDriver.poolConnections, true);
@@ -270,7 +270,7 @@ public class H2NarayanaTransactionalDriverTxMgr {
 		InitialContext context = new InitialContext();
 		
 		XADataSource xaDS1 = getXADataSource(DB_1);
-		String xaDS1Jndi = TransactionalDriver.arjunaDriver + "ds1";
+		String xaDS1Jndi = TransactionalDriver.arjunaDriver + "ds1"; 
         context.bind("ds1", xaDS1);
 		
 		Properties prop1 = new Properties();

@@ -1,5 +1,8 @@
 package basics;
 
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+
 public class JDBC_JTA_JTS {
 	
 
@@ -64,4 +67,8 @@ public class JDBC_JTA_JTS {
 	 * commits the whole transaction, and returns the results to the application
 	 * 
 	 */
+	
+	//Local single resource manager
+	PlatformTransactionManager ptxMgr;
+	DataSourceTransactionManager dsTxMgr;
 }
