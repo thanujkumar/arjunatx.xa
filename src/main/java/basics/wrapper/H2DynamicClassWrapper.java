@@ -24,6 +24,7 @@ public class H2DynamicClassWrapper implements DynamicClass {
 
 		DataSourceWrapper ds = new DataSourceWrapper(new JdbcDataSource());
 		
+		
 		ds.setPassword("");
 		ds.setUser("");
 		ds.setUrl(url);

@@ -34,7 +34,9 @@
 	</bean>
 
 	<!-- TX Configuration -->
-	<bean id="arjunaTransactionManager" class="com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionManagerImple" />
+	<bean id="arjunaTransactionManager" class="com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionManagerImple" >
+	 <property name="transactionTimeout" value="360" />
+	</bean>
 
 	<bean id="arjunaUserTransaction" class="com.arjuna.ats.internal.jta.transaction.arjunacore.UserTransactionImple" />
 	<!--  bean id="arjunaUserTransaction" class="com.arjuna.ats.jta.UserTransaction"  factory-method="userTransaction"/ -->
