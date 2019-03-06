@@ -12,9 +12,11 @@
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
 		<property name="driverClassName" value="com.arjuna.ats.jdbc.TransactionalDriver" />
 		<property name="url" value="jdbc:arjuna:oracle:thin:@localhost:1521/orcl" />
+		<property name="username" value="APPDATA" />
+		<property name="password" value="app" /> <!-- This will override below property -->
 		<property name="connectionProperties">
 		<props>
-				<prop key="user">appdata</prop>
+				<prop key="user">APPDATA</prop>
 				<prop key="password">app</prop>
 				<prop key="DYNAMIC_CLASS">spf2.arjunatx.xa.jdbc.OracleXADynamicClazz</prop>
 			</props>

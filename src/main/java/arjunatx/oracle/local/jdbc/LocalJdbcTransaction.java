@@ -44,7 +44,7 @@ public class LocalJdbcTransaction {
         
         
         try {
-            PreparedStatement ps1 = conn1.prepareStatement("INSERT INTO TEST_TX1 (ID, NAME, AGE) VALUES(?, ?, ?)");
+            PreparedStatement ps1 = conn1.prepareStatement("INSERT INTO TEST_TX2 (ID, NAME, AGE) VALUES(?, ?, ?)");
             ps1.setString(1, new Date().toString());
             ps1.setString(2, "Arjuna");
             ps1.setInt(3, 12);

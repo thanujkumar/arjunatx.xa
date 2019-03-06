@@ -49,6 +49,10 @@ public class OracleXADynamicClazz implements DynamicClass {
 
 				dataSource.setURL(TransactionalDriver.jdbc + OracleXADynamicClazz.driverName + theDbName);
                 dataSource.setConnectionFactoryClassName("oracle.jdbc.xa.client.OracleXADataSource");
+                
+                //TODO -remove below : this should be part of properties not hardcoded here
+                dataSource.setUser("APPDATA");
+                dataSource.setPassword("app");
 
 //				dataSource.setLoginTimeout(10);
 //                dataSource.setMinPoolSize(2);

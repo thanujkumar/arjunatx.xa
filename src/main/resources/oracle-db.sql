@@ -22,4 +22,4 @@ grant create session, create table, create view, create sequence, create procedu
     ID VARCHAR2(30) NOT NULL ENABLE, 
    NAME VARCHAR2(30) NOT NULL ENABLE, 
 	AGE NUMBER NOT NULL ENABLE
-   ) TA
+   ) TABLESPACE "APP_DATA" ;

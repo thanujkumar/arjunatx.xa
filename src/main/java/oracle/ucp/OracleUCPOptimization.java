@@ -74,6 +74,8 @@ public class OracleUCPOptimization extends Logging {
 		
 		System.out.println("oracle.ucp.jdbc.ValidConnection.isValid : "+ ((oracle.ucp.jdbc.ValidConnection)xaCon).isValid());
        
+		printStatistics(pool);
+		
 		ucpm.destroyConnectionPool(pool.getConnectionPoolName());
 	}
 }
