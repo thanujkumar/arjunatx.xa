@@ -92,6 +92,7 @@ public class OracleEnlistManualTxMgr {
 		printStatistics((PoolDataSource) xaDS2);
 		
 		TransactionManager txMgr = com.arjuna.ats.jta.TransactionManager.transactionManager();
+		
 		txMgr.begin();
 		
 	
@@ -99,8 +100,9 @@ public class OracleEnlistManualTxMgr {
 		//enlist the connection XAResource
 		txMgr.getTransaction().enlistResource(xaCon1.getXAResource());
 		
-		
 		XAConnection xaCon2 = xaDS2.getXAConnection();
+		System.out.println(xaCon1.getXAResource().isSameRM(xaCon2.getXAResource()));
+
 		//enlist the connection XAResource
 		txMgr.getTransaction().enlistResource(xaCon2.getXAResource());
 
