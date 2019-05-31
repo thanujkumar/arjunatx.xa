@@ -102,7 +102,7 @@ public class H2EnlistManualConcurrentTxMgr {
 		setUp();
 		verify();
 
-		for (int i = 2; i < 10; i++) {
+		for (int i = 2; i <= 10; i++) {
 			//Or run in thread instead of main
 			try {
 
@@ -110,7 +110,7 @@ public class H2EnlistManualConcurrentTxMgr {
 				runTx(() -> {
 					try {
 						Thread.sleep(100);
-						throw new RuntimeException();
+  					    throw new RuntimeException();
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -157,7 +157,8 @@ public class H2EnlistManualConcurrentTxMgr {
 		  
 		try {
 			ps1.executeUpdate();
-			r.run();
+			if (i % 2 == 0)
+			   r.run(); //Throw exception at event still other inserts should work (total 4 odd inserts)
 			ps2.executeUpdate();
 			txMgr.commit();
 		} catch (SecurityException  | HeuristicMixedException | HeuristicRollbackException e) {

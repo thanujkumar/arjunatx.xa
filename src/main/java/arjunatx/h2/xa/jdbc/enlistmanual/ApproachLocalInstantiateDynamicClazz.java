@@ -16,7 +16,7 @@ public class ApproachLocalInstantiateDynamicClazz implements DynamicClass {
 
 	@Override
 	public XADataSource getDataSource(String dbName) throws SQLException {
-		JdbcDataSource ds = new JdbcDataSource();;
+		JdbcDataSource ds = new JdbcDataSource();
 		ds.setPassword(DB_PASSWORD);
 		ds.setUser(DB_USER);
 		ds.setUrl(String.format(DB_URL, dbName));

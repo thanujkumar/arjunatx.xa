@@ -103,7 +103,8 @@ public class OracleEnlistManualTxMgr {
 		XAConnection xaCon2 = xaDS2.getXAConnection();
 		//enlist the connection XAResource
 		txMgr.getTransaction().enlistResource(xaCon2.getXAResource());
-		
+
+
 		
 		PreparedStatement ps1 = xaCon1.getConnection().prepareStatement("INSERT INTO TEST_TX2 (ID, NAME, AGE) VALUES(?, ?, ?)");
 		ps1.setString(1, "1");
