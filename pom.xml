@@ -17,9 +17,9 @@
 		<project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
 		<project.resources.sourceEncoding>${encoding}</project.resources.sourceEncoding>
 
-		<spring.version>[4.3.17,)</spring.version>
+		<spring.version>5.1.7.RELEASE</spring.version>
 		<hibernate.version>5.1.0.Final</hibernate.version>
-		<oracle.driver.version>12.2.0.1</oracle.driver.version>
+		<oracle.driver.version>18.3.0.0</oracle.driver.version>
 		<logback.version>1.1.2</logback.version>
 		<version.narayana>5.9.3.Final</version.narayana>
 		<version.jboss-transaction-api>1.0.1.Final</version.jboss-transaction-api>
@@ -160,7 +160,7 @@
 		<dependency>
 			<groupId>com.oracle.jdbc</groupId>
 			<artifactId>ons</artifactId>
-			<version>12.1.0.2</version>
+			<version>${oracle.driver.version}</version>
 		</dependency>
 
 		<!-- Logback logging -->
