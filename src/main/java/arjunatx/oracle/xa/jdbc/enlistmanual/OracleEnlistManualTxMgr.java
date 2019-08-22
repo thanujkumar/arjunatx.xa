@@ -16,6 +16,10 @@ import javax.sql.XADataSource;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.TransactionManager;
+import javax.transaction.xa.XAResource;
+
+import com.arjuna.ats.internal.jta.xa.XID;
+import com.arjuna.ats.jta.xa.XidImple;
 
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
@@ -25,6 +29,8 @@ import oracle.ucp.jdbc.PoolXADataSource;
  * http://jbossts.blogspot.in/2017/12/narayana-jdbc-transactional-driver.html
  */
 public class OracleEnlistManualTxMgr {
+	
+	//Known issue - https://access.redhat.com/solutions/1166443
 	
 	static {
 		System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-7s] %5$s %n");
@@ -97,14 +103,14 @@ public class OracleEnlistManualTxMgr {
 		
 	
 		XAConnection xaCon1 = xaDS1.getXAConnection();
+		XAResource xaRs1 = xaCon1.getXAResource();
 		//enlist the connection XAResource
-		txMgr.getTransaction().enlistResource(xaCon1.getXAResource());
+		txMgr.getTransaction().enlistResource(xaRs1);
 		
 		XAConnection xaCon2 = xaDS2.getXAConnection();
-		System.out.println(xaCon1.getXAResource().isSameRM(xaCon2.getXAResource()));
-
+		XAResource xaRs2 = xaCon2.getXAResource();
 		//enlist the connection XAResource
-		txMgr.getTransaction().enlistResource(xaCon2.getXAResource());
+		txMgr.getTransaction().enlistResource(xaRs2);
 
 
 		

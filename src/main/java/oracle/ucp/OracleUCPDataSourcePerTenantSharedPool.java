@@ -30,6 +30,9 @@ import oracle.ucp.jdbc.oracle.OracleJDBCConnectionPoolStatistics;
  *
  */
 public class OracleUCPDataSourcePerTenantSharedPool extends Logging {
+
+  //https://blogs.oracle.com/dev2dev/ucp-multi-tenant-shared-pool-configuration
+
   /* This require XML configuration */
 	static {
 		URL url = ClassLoader.getSystemClassLoader().getResource("DS_Per_PDB_SharePool.xml");
