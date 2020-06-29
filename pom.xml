@@ -19,7 +19,7 @@
 
 		<spring.version>5.1.7.RELEASE</spring.version>
 		<hibernate.version>5.1.0.Final</hibernate.version>
-		<oracle.driver.version>19.3.0.0</oracle.driver.version>
+		<oracle.driver.version>19.6.0.0</oracle.driver.version>
 		<logback.version>1.1.2</logback.version>
 		<version.narayana>5.9.5.Final</version.narayana>
 		<version.jboss-transaction-api>1.0.1.Final</version.jboss-transaction-api>
