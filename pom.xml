@@ -19,7 +19,7 @@
 
 		<spring.version>5.1.7.RELEASE</spring.version>
 		<hibernate.version>5.1.0.Final</hibernate.version>
-		<oracle.driver.version>18.3.0.0</oracle.driver.version>
+		<oracle.driver.version>19.3.0.0</oracle.driver.version>
 		<logback.version>1.1.2</logback.version>
 		<version.narayana>5.9.5.Final</version.narayana>
 		<version.jboss-transaction-api>1.0.1.Final</version.jboss-transaction-api>
@@ -146,19 +146,19 @@
 		<!-- https://softwarecave.org/2014/06/14/adding-external-jars-into-maven-project/ -->
 		<!-- mvn install:install-file -Dfile=ons-12.1.0.2.jar  -DgroupId=com.oracle.jdbc -DartifactId=ons -Dversion=12.1.0.2 -Dpackaging=jar -->
 		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc8</artifactId>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc10</artifactId>
 			<version>${oracle.driver.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>com.oracle.jdbc</groupId>
+			<groupId>com.oracle.database.jdbc</groupId>
 			<artifactId>ucp</artifactId>
 			<version>${oracle.driver.version}</version>
 		</dependency>
 		
 		<dependency>
-			<groupId>com.oracle.jdbc</groupId>
+			<groupId>com.oracle.database.ha</groupId>
 			<artifactId>ons</artifactId>
 			<version>${oracle.driver.version}</version>
 		</dependency>
