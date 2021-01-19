@@ -1,0 +1,1 @@
+THIS PROJECT IS MOVED TO ORACLE_NARAYANATX (https://github.com/thanujkumar/oracle_narayanatx.git)
